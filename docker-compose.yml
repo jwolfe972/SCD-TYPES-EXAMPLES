@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:17
+    shm_size: 1gb
+    container_name: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: scd_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "user", "-d", "scd_db" ]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - my_network
+
+
+
+volumes:
+  pgdata:
+
+
+networks:
+  my_network:
+    driver: bridge
